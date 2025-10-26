@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 14 Tuesday & Thursday Practice Quiz</title>
+<style>
+/* --- Color Variables --- */
+:root {
+/* Default: Dark Theme */
+--bg-color: #2d343e; /* Dark background */
+--container-bg: #3c424f; /* Slightly lighter container */
+--text-color: #e8e6e3; /* Light text */
+--question-text-color: #8ab4f8; /* Light blue for questions */
+--lo-text-color: #b0c4de; /* Lighter blue for learning objective */
+--border-color: #555; /* Darker borders */
+--separator-color: #4a4f5a;
+--label-bg: #454c5a;
+--label-border: #6c757d;
+--label-hover-bg: #525966;
+--label-hover-border: #7a828a;
+--button-bg: #8ab4f8;
+--button-text: #202124;
+--button-hover-bg: #a3c5f9;
+--button-disabled-bg: #5f6368;
+--feedback-correct-bg: #344e41;
+--feedback-correct-text: #c7f9cc;
+--feedback-correct-border: #52b788;
+--feedback-incorrect-bg: #5e2129;
+--feedback-incorrect-text: #f8d7da;
+--feedback-incorrect-border: #a4133c;
+--feedback-rationale-text: #adb5bd; /* Lighter gray for rationale */
+--feedback-source-text: #c7d3e0;
+--feedback-separator: #6c757d;
+--radio-accent: #8ab4f8;
+}
+.light-theme {
+--bg-color: #eef2f7;
+--container-bg: #ffffff;
+--text-color: #343a40;
+--question-text-color: #0056b3;
+--lo-text-color: #5a6e8a;
+--border-color: #dee2e6;
+--separator-color: #e9ecef;
+--label-bg: #f8f9fa;
+--label-border: #ced4da;
+--label-hover-bg: #e2e6ea;
+--label-hover-border: #adb5bd;
+--button-bg: #007bff;
+--button-text: white;
+--button-hover-bg: #0056b3;
+--button-disabled-bg: #6c757d;
+--feedback-correct-bg: #d1e7dd;
+--feedback-correct-text: #0f5132;
+--feedback-correct-border: #badbcc;
+--feedback-incorrect-bg: #f8d7da;
+--feedback-incorrect-text: #842029;
+--feedback-incorrect-border: #f5c2c7;
+--feedback-rationale-text: #495057;
+--feedback-source-text: #343a40;
+--feedback-separator: #ccc;
+--radio-accent: #007bff;
+}
+/* --- General Styles --- */
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+line-height: 1.7;
+margin: 0;
+background-color: var(--bg-color);
+color: var(--text-color);
+padding-bottom: 40px;
+transition: background-color 0.3s, color 0.3s;
+}
+#theme-toggle-button {
+position: fixed;
+top: 15px;
+right: 15px;
+padding: 8px 12px;
+background-color: var(--button-bg);
+color: var(--button-text);
+border: 1px solid var(--label-border);
+border-radius: 5px;
+cursor: pointer;
+font-size: 0.9em;
+z-index: 1000;
+transition: background-color 0.3s, color 0.3s;
+}
+#theme-toggle-button:hover {
+opacity: 0.8;
+}
+#quiz-container {
+max-width: 900px;
+margin: 80px auto 30px auto;
+background: var(--container-bg);
+padding: 25px 35px;
+border-radius: 10px;
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+border: 1px solid var(--border-color);
+transition: background-color 0.3s, border-color 0.3s;
+}
+.question-block {
+margin-bottom: 35px;
+padding-bottom: 25px;
+border-bottom: 1px solid var(--separator-color);
+transition: border-color 0.3s;
+}
+.question-block:last-child {
+border-bottom: none;
+margin-bottom: 0;
+padding-bottom: 5px;
+}
+.learning-objective {
+font-size: 0.85em;
+font-style: italic;
+color: var(--lo-text-color);
+margin-bottom: 15px;
+padding-bottom: 10px;
+border-bottom: 1px dashed var(--separator-color);
+}
+.question-text {
+font-weight: 600;
+font-size: 1.1em;
+margin-bottom: 18px;
+color: var(--question-text-color);
+transition: color 0.3s;
+}
+.options label {
+display: block;
+margin-bottom: 12px;
+cursor: pointer;
+padding: 10px 15px;
+border-radius: 6px;
+border: 1px solid var(--label-border);
+background-color: var(--label-bg);
+transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+.options label:hover {
+background-color: var(--label-hover-bg);
+border-color: var(--label-hover-border);
+}
+.options input[type="radio"]:checked+span {
+font-weight: bold;
+color: var(--question-text-color);
+}
+.options input[type="radio"] {
+margin-right: 12px;
+accent-color: var(--radio-accent);
+}
+.button-container {
+display: flex;
+gap: 10px;
+margin-top: 15px;
+}
+.check-button {
+padding: 8px 15px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-size: 0.95em;
+transition: background-color 0.2s, color 0.2s, opacity 0.2s;
+background-color: var(--button-bg);
+color: var(--button-text);
+}
+.check-button:hover {
+opacity: 0.85;
+}
+.check-button:disabled {
+background-color: var(--button-disabled-bg);
+cursor: not-allowed;
+opacity: 0.7;
+}
+.feedback {
+margin-top: 20px;
+padding: 15px;
+border-radius: 6px;
+font-size: 0.95em;
+display: none;
+border: 1px solid transparent;
+transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+.feedback.correct {
+background-color: var(--feedback-correct-bg);
+color: var(--feedback-correct-text);
+border-color: var(--feedback-correct-border);
+display: block;
+}
+.feedback.incorrect {
+background-color: var(--feedback-incorrect-bg);
+color: var(--feedback-incorrect-text);
+border-color: var(--feedback-incorrect-border);
+display: block;
+}
+.feedback-status {
+font-weight: bold;
+font-size: 1.1em;
+display: block;
+margin-bottom: 8px;
+}
+.feedback-rationale {
+margin-top: 10px;
+padding-top: 10px;
+border-top: 1px dashed var(--feedback-separator);
+font-size: 0.9em;
+color: var(--feedback-rationale-text);
+transition: color 0.3s, border-color 0.3s;
+}
+.feedback-source {
+margin-top: 10px;
+font-size: 0.85em;
+font-style: italic;
+color: var(--feedback-source-text);
+background-color: rgba(0,0,0,0.1);
+padding: 8px;
+border-radius: 4px;
+}
+h1 {
+text-align: center;
+color: var(--question-text-color);
+margin-top: 30px;
+margin-bottom: 30px;
+font-weight: 600;
+transition: color 0.3s;
+}
+</style>
+</head>
+<body>
+<button id="theme-toggle-button">Toggle Theme</button>
+<h1>Week 14 Tuesday & Thursday Practice Quiz</h1>
+<div id="quiz-container">
+<!-- Questions will be loaded here by JavaScript -->
+</div>
+<script>
+const quizData = [
+    {
+        learningObjective: "LO1 (Anterior Forearm and Elbow): Identify the bony features, articulations, and associated ligaments of the distal humerus, as well as the radius and ulna. Discuss the anatomical & clinical considerations of fractures of these bones, radial head subluxation, and elbow dislocation.",
+        question: "A 65-year-old woman presents to the emergency department after tripping and landing on her outstretched, pronated hand. An X-ray reveals a complete transverse fracture of the distal radius with dorsal displacement of the distal fragment. Which of the following is the most likely diagnosis?",
+        options: {
+            A: "Smith's fracture",
+            B: "Colles' fracture",
+            C: "Monteggia fracture",
+            D: "Galeazzi fracture"
+        },
+        correctAnswer: "B",
+        rationale: "A Colles' fracture is a complete transverse fracture of the distal radius, typically resulting from forced dorsiflexion of the hand during a fall on an outstretched hand (FOOSH injury). The characteristic finding is dorsal displacement of the distal fragment.",
+        source: "'Results from forced dorsiflexion of the hand when forearm & hand are pronated (FOOSH Injury – “Fall on an outstretched hand”).' (Anterior Forearm and Elbow, Slide 8)"
+    },
+    {
+        learningObjective: "LO1 (Anterior Forearm and Elbow): Identify the bony features, articulations, and associated ligaments of the distal humerus, as well as the radius and ulna. Discuss the anatomical & clinical considerations of fractures of these bones, radial head subluxation, and elbow dislocation.",
+        question: "During an anatomy lab practical, a student is asked to identify the articulation between the distal humerus and the head of the radius. Which bony landmark on the anterior aspect of the distal humerus articulates with the head of the radius?",
+        options: {
+            A: "Trochlea",
+            B: "Olecranon fossa",
+            C: "Coronoid fossa",
+            D: "Capitulum"
+        },
+        correctAnswer: "D",
+        rationale: "The capitulum is the lateral, rounded eminence on the distal end of the humerus that articulates with the head of the radius, forming the humeroradial joint.",
+        source: "'Bony Landmark on the Humerus: 1. Capitulum; Articulates with... Head of the radius.' (Anterior Forearm and Elbow, Slide 9)"
+    },
+    {
+        learningObjective: "LO1 (Anterior Forearm and Elbow): Identify the bony features, articulations, and associated ligaments of the distal humerus, as well as the radius and ulna. Discuss the anatomical & clinical considerations of fractures of these bones, radial head subluxation, and elbow dislocation.",
+        question: "A 3-year-old child is brought to the clinic by his parents. The father reports that the child cried out in pain after being suddenly lifted by his arms while his forearms were pronated. The child is now holding his arm close to his body and refuses to use it. This presentation is classic for a subluxation of the radial head. Which ligament, which encircles the head of the radius, is implicated in this injury?",
+        options: {
+            A: "Ulnar collateral ligament",
+            B: "Radial collateral ligament",
+            C: "Anular ligament",
+            D: "Interosseous membrane"
+        },
+        correctAnswer: "C",
+        rationale: "Subluxation of the radial head, or 'nursemaid's elbow,' occurs when the radial head is pulled distally and slips out of the anular ligament. This ligament normally encircles the radial head, holding it against the radial notch of the ulna.",
+        source: "'Anular ligament: encircles the head of the radius.' (Anterior Forearm and Elbow, Slide 12)"
+    },
+    {
+        learningObjective: "LO2 (Anterior Forearm and Elbow): Discuss the organization of the fascial compartments of the forearm in terms of functional muscular groups and neurovasculature supplying each compartment.",
+        question: "A 30-year-old construction worker presents with severe pain and swelling in his forearm after a crush injury. The forearm is divided into anterior and posterior compartments by the radius, ulna, and specific fascial layers. Which structure separates these two main compartments?",
+        options: {
+            A: "Antebrachial fascia",
+            B: "Medial intermuscular fascia",
+            C: "Lateral intermuscular fascia",
+            D: "Interosseous membrane"
+        },
+        correctAnswer: "D",
+        rationale: "The interosseous membrane is a tough, fibrous sheet of connective tissue that spans the distance between the radius and ulna. Along with the bones themselves, it serves as the primary separator between the anterior (flexor) and posterior (extensor) compartments of the forearm.",
+        source: "'Interosseous membrane: tough fibrous sheet connecting the radius and ulna.' (Anterior Forearm and Elbow, Slide 5 and 16)"
+    },
+    {
+        learningObjective: "LO2 (Anterior Forearm and Elbow): Discuss the organization of the fascial compartments of the forearm in terms of functional muscular groups and neurovasculature supplying each compartment.",
+        question: "The muscles of the anterior compartment of the forearm primarily function as flexors and pronators. The neurovasculature supplying this compartment is distinct from the posterior compartment. Which nerve provides the primary motor innervation to the muscles in the anterior compartment?",
+        options: {
+            A: "Ulnar nerve",
+            B: "Radial nerve",
+            C: "Musculocutaneous nerve",
+            D: "Median nerve"
+        },
+        correctAnswer: "D",
+        rationale: "The anterior compartment of the forearm is generally innervated by the median nerve. While the ulnar nerve innervates one and a half muscles in this compartment, the median nerve is responsible for the majority of the muscles.",
+        source: "'General Innervation and Organization: Median nerve. Some exceptions for ulnar nerve.' (Anterior Forearm and Elbow, Slide 17)"
+    },
+    {
+        learningObjective: "LO2 (Anterior Forearm and Elbow): Discuss the organization of the fascial compartments of the forearm in terms of functional muscular groups and neurovasculature supplying each compartment.",
+        question: "The forearm is enveloped in a deep fascia that helps to organize the muscles into functional groups. What is the specific name for the deep fascia of the forearm?",
+        options: {
+            A: "Brachial fascia",
+            B: "Antebrachial fascia",
+            C: "Palmar aponeurosis",
+            D: "Flexor retinaculum"
+        },
+        correctAnswer: "B",
+        rationale: "The deep fascia of the arm is the brachial fascia, while the deep fascia of the forearm is the antebrachial fascia. This fascial layer creates the compartments that enclose the muscles.",
+        source: "'Latin note: Brachial=arm, Antebrachial = forearm... [Diagram showing Antebrachial Fascia enclosing the forearm compartments].' (Anterior Forearm and Elbow, Slide 16)"
+    },
+    {
+        learningObjective: "LO3 (Anterior Forearm and Elbow): Describe the attachments, innervation, functions, and testing procedures of muscles found in the anterior forearm. Predict functional consequences of loss of action of these muscles.",
+        question: "A professional golfer presents with pain and tenderness over the medial epicondyle of his humerus, diagnosed as medial epicondylitis ('golfer's elbow'). This condition is an overuse injury of the common proximal attachment for several muscles in the superficial layer of the anterior forearm. Which of the following muscles does NOT originate from this common flexor attachment?",
+        options: {
+            A: "Pronator teres",
+            B: "Flexor carpi radialis",
+            C: "Pronator quadratus",
+            D: "Palmaris longus"
+        },
+        correctAnswer: "C",
+        rationale: "The pronator quadratus is a deep muscle of the anterior forearm and originates from the distal anterior surface of the ulna, not the common flexor attachment at the medial epicondyle. The other muscles listed are all superficial muscles that share this common origin.",
+        source: "'From a common proximal tendon – common flexor attachment.' (Anterior Forearm and Elbow, Slide 18) and 'Pronator Quadratus: Proximal attachment: Distal anterior surface of the ulna.' (Anterior Forearm and Elbow, Slide 38)"
+    },
+    {
+        learningObjective: "LO3 (Anterior Forearm and Elbow): Describe the attachments, innervation, functions, and testing procedures of muscles found in the anterior forearm. Predict functional consequences of loss of action of these muscles.",
+        question: "A patient has sustained an injury that denervates the flexor digitorum superficialis muscle. A physician tests the function of this muscle by asking the patient to flex their fingers. Loss of action of this muscle would result in the inability to flex which joints?",
+        options: {
+            A: "Distal interphalangeal (DIP) joints",
+            B: "Metacarpophalangeal (MCP) and proximal interphalangeal (PIP) joints",
+            C: "Carpometacarpal (CMC) joint of the thumb",
+            D: "Radiocarpal (wrist) joint"
+        },
+        correctAnswer: "B",
+        rationale: "The flexor digitorum superficialis muscle is the sole muscle in the intermediate layer of the anterior forearm. Its primary action is to flex the middle phalanges at the proximal interphalangeal (PIP) joints and it also assists in flexing the metacarpophalangeal (MCP) joints.",
+        source: "'Actions: Flexes middle phalanges at proximal interphalangeal joints and metacarpophalangeal joints.' (Anterior Forearm and Elbow, Slide 31)"
+    },
+    {
+        learningObjective: "LO3 (Anterior Forearm and Elbow): Describe the attachments, innervation, functions, and testing procedures of muscles found in the anterior forearm. Predict functional consequences of loss of action of these muscles.",
+        question: "A patient with a deep laceration to the medial aspect of the forearm is being evaluated. Most muscles in the anterior forearm are innervated by the median nerve. However, one of the superficial muscles is a key exception and is instead innervated by the ulnar nerve. Which muscle is this?",
+        options: {
+            A: "Flexor carpi radialis",
+            B: "Pronator teres",
+            C: "Palmaris longus",
+            D: "Flexor carpi ulnaris"
+        },
+        correctAnswer: "D",
+        rationale: "The flexor carpi ulnaris is located in the superficial muscle group of the anterior forearm. It is one of the primary exceptions to the rule of median nerve innervation in this compartment, as it is innervated by the ulnar nerve.",
+        source: "'Innervation: Ulnar nerve (C7, 8).' (Anterior Forearm and Elbow, Slide 27)"
+    },
+    {
+        learningObjective: "LO4 (Anterior Forearm and Elbow): Describe the course and innervations (i.e., muscular and cutaneous innervation) of the median, and ulnar nerves within the forearm. Describe common sites of injury and clinical manifestations of the subsequent neurodeficiencies.",
+        question: "A patient is diagnosed with anterior interosseous syndrome due to a compression injury of the anterior interosseous nerve. This nerve is a branch of the median nerve that supplies the deep muscles of the anterior forearm. Which of the following muscles would be paralyzed as a result of this injury?",
+        options: {
+            A: "Flexor carpi ulnaris",
+            B: "Flexor digitorum superficialis",
+            C: "Flexor pollicis longus",
+            D: "Palmaris longus"
+        },
+        correctAnswer: "C",
+        rationale: "The anterior interosseous nerve is a motor branch of the median nerve that innervates the deep layer of muscles. This includes the flexor pollicis longus, pronator quadratus, and the lateral half of the flexor digitorum profundus. The other muscles listed are innervated by other nerves or other branches of the median nerve.",
+        source: "'Innervates the deep layer of muscles: pronator quadratus, flexor pollicis longus, and lateral part of flexor digitorum profundus.' (Anterior Forearm and Elbow, Slide 45)"
+    },
+    {
+        learningObjective: "LO4 (Anterior Forearm and Elbow): Describe the course and innervations (i.e., muscular and cutaneous innervation) of the median, and ulnar nerves within the forearm. Describe common sites of injury and clinical manifestations of the subsequent neurodeficiencies.",
+        question: "A patient presents with weakness in his hand. To test for a lesion of the anterior interosseous nerve, the physician asks the patient to make an 'OK' sign. The patient is unable to form a circle with his thumb and index finger, instead making a 'pinch' sign. This indicates weakness of which two muscles?",
+        options: {
+            A: "Flexor digitorum superficialis and flexor carpi radialis",
+            B: "Flexor pollicis longus and flexor digitorum profundus (lateral part)",
+            C: "Abductor pollicis brevis and opponens pollicis",
+            D: "Palmaris longus and flexor carpi ulnaris"
+        },
+        correctAnswer: "B",
+        rationale: "Anterior interosseous syndrome results from injury to the anterior interosseous nerve. This causes weakness or paralysis of the flexor pollicis longus (which flexes the thumb's distal phalanx) and the lateral part of the flexor digitorum profundus (which flexes the index and middle fingers' distal phalanges). The inability to flex these joints prevents the formation of a proper 'OK' sign.",
+        source: "'Reduced flexion of the flexor digitorum profundus and flexor pollicis longus.' (Anterior Forearm and Elbow, Slide 47)"
+    },
+    {
+        learningObjective: "LO4 (Anterior Forearm and Elbow): Describe the course and innervations (i.e., muscular and cutaneous innervation) of the median, and ulnar nerves within the forearm. Describe common sites of injury and clinical manifestations of the subsequent neurodeficiencies.",
+        question: "A patient suffers a nerve injury in the forearm. Upon examination, the physician notes weakness in wrist adduction and flexion of the 4th and 5th digits at the distal interphalangeal (DIP) joints. These deficits point to an injury of the ulnar nerve, which innervates which of the following muscles in the anterior forearm?",
+        options: {
+            A: "Pronator teres and flexor carpi radialis",
+            B: "Flexor carpi ulnaris and the medial half of flexor digitorum profundus",
+            C: "Flexor digitorum superficialis and palmaris longus",
+            D: "Flexor pollicis longus and pronator quadratus"
+        },
+        correctAnswer: "B",
+        rationale: "The ulnar nerve provides motor innervation to only one and a half muscles in the anterior forearm: the flexor carpi ulnaris (which flexes and adducts the hand) and the medial half of the flexor digitorum profundus (which flexes the DIP joints of the 4th and 5th digits).",
+        source: "'Motor innervation: flexor carpi ulnaris; the ulnar part of flexor digitorum profundus.' (Anterior Forearm and Elbow, Slide 48)"
+    },
+    {
+        learningObjective: "LO5 (Anterior Forearm and Elbow): Trace the courses of the major arteries, superficial & deep veins, and lymphatics within the anterior forearm. Define collateral circulation, and describe why it is important at joints in general and specifically at the elbow. Identify sites where a pulse rate can be measured.",
+        question: "In the cubital fossa, the brachial artery bifurcates to supply the forearm. Which two major arteries arise from this bifurcation?",
+        options: {
+            A: "Ulnar and common interosseous arteries",
+            B: "Radial and ulnar arteries",
+            C: "Anterior and posterior interosseous arteries",
+            D: "Radial and radial recurrent arteries"
+        },
+        correctAnswer: "B",
+        rationale: "The brachial artery is the primary arterial supply to the arm. In the forearm, specifically in the region of the cubital fossa, it divides into its two terminal branches: the radial artery and the ulnar artery.",
+        source: "'In the forearm the brachial a. gives rise to: Ulnar a. [and] Radial a.' (Anterior Forearm and Elbow, Slide 53)"
+    },
+    {
+        learningObjective: "LO5 (Anterior Forearm and Elbow): Trace the courses of the major arteries, superficial & deep veins, and lymphatics within the anterior forearm. Define collateral circulation, and describe why it is important at joints in general and specifically at the elbow. Identify sites where a pulse rate can be measured.",
+        question: "A network of anastomoses around the elbow ensures blood flow to the forearm and hand even if the brachial artery is occluded. This network is formed by recurrent arteries from the radial and ulnar arteries connecting with branches from the brachial artery. What is this type of circulatory network called?",
+        options: {
+            A: "Portal system",
+            B: "Arteriovenous shunt",
+            C: "Collateral circulation",
+            D: "End-arterial system"
+        },
+        correctAnswer: "C",
+        rationale: "Collateral circulation is a network of alternative pathways for blood flow, typically around a joint. The question describes the anastomoses around the elbow involving the ulnar recurrent, radial recurrent, and common interosseous arteries, which is a classic example of collateral circulation ensuring distal perfusion.",
+        source: "'Trace the courses of the major arteries...Define collateral circulation, and describe why it is important at joints in general and specifically at the elbow.' (Anterior Forearm and Elbow, Slide 2)"
+    },
+    {
+        learningObjective: "LO5 (Anterior Forearm and Elbow): Trace the courses of the major arteries, superficial & deep veins, and lymphatics within the anterior forearm. Define collateral circulation, and describe why it is important at joints in general and specifically at the elbow. Identify sites where a pulse rate can be measured.",
+        question: "A patient develops an infection in her hand. The infection spreads via the lymphatic vessels, which generally follow the venous drainage. Lymph from the hand travels via superficial lymphatic vessels primarily to which group of lymph nodes?",
+        options: {
+            A: "Supraclavicular lymph nodes",
+            B: "Cervical lymph nodes",
+            C: "Axillary or apical lymph nodes",
+            D: "Cubital lymph nodes"
+        },
+        correctAnswer: "C",
+        rationale: "The lymphatic drainage of the upper limb begins with the lymphatic plexus in the hand. From there, lymph travels in superficial lymphatic vessels that ascend the limb and ultimately drain into the axillary and/or apical lymph nodes located in the axilla.",
+        source: "'Lymphatic plexus (hand) → superficial lymphatic vessels → axillary or apical lymph nodes.' (Anterior Forearm and Elbow, Slide 57)"
+    },
+    {
+        learningObjective: "LO6 (Anterior Forearm and Elbow): Discuss the clinical presentation and anatomical basis for the following: pronator syndrome and cubital tunnel syndrome.",
+        question: "A 40-year-old carpenter complains of pain in his proximal forearm and sensory deficits over the lateral palm. Symptoms are exacerbated by repetitive pronation of the forearm. The physician suspects pronator syndrome, which involves compression of the median nerve. Between the two heads of which muscle does the median nerve pass, making it a common site for entrapment?",
+        options: {
+            A: "Flexor carpi ulnaris",
+            B: "Flexor digitorum superficialis",
+            C: "Pronator teres",
+            D: "Pronator quadratus"
+        },
+        correctAnswer: "C",
+        rationale: "Pronator syndrome is a compression neuropathy of the median nerve. A primary site of compression is where the nerve passes between the two heads (humeral and ulnar) of the pronator teres muscle in the proximal forearm.",
+        source: "'Passing between the two heads of pronator teres (pronator syndrome).' (Anterior Forearm and Elbow, Slide 46)"
+    },
+    {
+        learningObjective: "LO6 (Anterior Forearm and Elbow): Discuss the clinical presentation and anatomical basis for the following: pronator syndrome and cubital tunnel syndrome.",
+        question: "A patient presents with numbness and tingling in his 4th and 5th digits and weakness of intrinsic hand muscles. The symptoms suggest compression of the ulnar nerve. A common site for this compression is in the cubital tunnel, located posterior to which bony landmark of the humerus?",
+        options: {
+            A: "Lateral epicondyle",
+            B: "Capitulum",
+            C: "Medial epicondyle",
+            D: "Olecranon"
+        },
+        correctAnswer: "C",
+        rationale: "Cubital tunnel syndrome involves compression of the ulnar nerve as it passes through the cubital tunnel at the elbow. This tunnel is located on the posterior aspect of the medial epicondyle of the humerus.",
+        source: "'Lesions to Ulnar Nerve...Posterior to medial epicondyle (cubital tunnel).' (Palm of Hand and Wrist, Slide 56)"
+    },
+    {
+        learningObjective: "LO6 (Anterior Forearm and Elbow): Discuss the clinical presentation and anatomical basis for the following: pronator syndrome and cubital tunnel syndrome.",
+        question: "A patient is being evaluated for nerve entrapment in the forearm. In pronator syndrome, the median nerve is compressed proximally, whereas in carpal tunnel syndrome, it is compressed distally at the wrist. A key finding to differentiate these two conditions is the sensory status of the central palm. Why is sensation in the central palm typically spared in carpal tunnel syndrome?",
+        options: {
+            A: "The palmar cutaneous branch of the ulnar nerve supplies this area.",
+            B: "The palmar cutaneous branch of the median nerve arises proximal to the carpal tunnel.",
+            C: "The anterior interosseous nerve provides sensory innervation to the palm.",
+            D: "The radial nerve provides overlapping sensation to this area."
+        },
+        correctAnswer: "B",
+        rationale: "The palmar cutaneous branch of the median nerve, which provides sensation to the skin of the central palm, branches off the median nerve in the forearm before the nerve enters the carpal tunnel. Therefore, in carpal tunnel syndrome, where the compression is within the tunnel, this branch is unaffected and sensation in the central palm remains intact.",
+        source: "'Palmar cutaneous br. of median nerve – branch proximal to carpal tunnel to innervate skin of central palm.' (Palm of Hand and Wrist, Slide 64)"
+    },
+    {
+        learningObjective: "LO7 (Anterior Forearm and Elbow): Identify anatomical structures associated with the anterior forearm and elbow on X-Rays, MRI, and CT scans.",
+        question: "A radiologist is reviewing a lateral X-ray of an elbow. She identifies a prominent bony process on the posterior aspect of the proximal ulna that forms the point of the elbow. Which structure is this?",
+        options: {
+            A: "Coronoid process",
+            B: "Olecranon",
+            C: "Radial head",
+            D: "Medial epicondyle"
+        },
+        correctAnswer: "B",
+        rationale: "The olecranon is the large, curved bony eminence of the proximal ulna that projects posteriorly. It articulates with the olecranon fossa of the humerus and is easily identifiable on a lateral elbow radiograph.",
+        source: "[Labeled X-ray image showing the Olecranon]. (Anterior Forearm and Elbow, Slide 59)"
+    },
+    {
+        learningObjective: "LO7 (Anterior Forearm and Elbow): Identify anatomical structures associated with the anterior forearm and elbow on X-Rays, MRI, and CT scans.",
+        question: "On an anteroposterior (AP) view of the forearm, a small extension of bone is visible on the lateral aspect of the distal radius. This landmark is typically larger and extends more distally than its counterpart on the ulna. What is this structure?",
+        options: {
+            A: "Radial tuberosity",
+            B: "Styloid process of the radius",
+            C: "Head of the radius",
+            D: "Lister's tubercle"
+        },
+        correctAnswer: "B",
+        rationale: "The styloid process of the radius is a projection of bone on the lateral surface of the distal radius, serving as an attachment point for ligaments. It is a key landmark on an AP radiograph of the wrist and forearm.",
+        source: "[Labeled X-ray image showing the Styloid process of radius]. (Anterior Forearm and Elbow, Slide 59)"
+    },
+    {
+        learningObjective: "LO7 (Anterior Forearm and Elbow): Identify anatomical structures associated with the anterior forearm and elbow on X-Rays, MRI, and CT scans.",
+        question: "An orthopedic surgeon is examining an AP X-ray of an elbow to assess the humeroulnar articulation. She focuses on the pulley-shaped medial portion of the distal humerus that articulates with the ulna. What is this structure called?",
+        options: {
+            A: "Capitulum",
+            B: "Trochlea",
+            C: "Medial epicondyle",
+            D: "Coronoid fossa"
+        },
+        correctAnswer: "B",
+        rationale: "The trochlea is the grooved, pulley-like structure on the medial aspect of the distal humerus. It articulates with the trochlear notch of the ulna.",
+        source: "[Labeled X-ray image showing the Trochlea]. (Anterior Forearm and Elbow, Slide 59)"
+    },
+    {
+        learningObjective: "LO1 (Palm of Hand and Wrist): Identify and describe the bones, articulations, and associated ligaments of the hand & wrist.",
+        question: "The radiocarpal (wrist) joint is a synovial joint responsible for the majority of wrist movement. It is formed by the articulation of the distal end of the radius, the articular disc of the distal radioulnar joint, and which three carpal bones?",
+        options: {
+            A: "Scaphoid, lunate, and capitate",
+            B: "Scaphoid, lunate, and triquetrum",
+            C: "Lunate, triquetrum, and pisiform",
+            D: "Trapezium, trapezoid, and capitate"
+        },
+        correctAnswer: "B",
+        rationale: "The radiocarpal joint is formed by the articulation of the radius and the articular disc (TFCC) proximally, with the proximal row of carpal bones distally. The three carpal bones that directly participate are the scaphoid, lunate, and triquetrum.",
+        source: "'Synovial joint composed of: Distal end of radius + Articular disc (TFCC) of the distal radioulnar joint + scaphoid, lunate, triquetrum.' (Palm of Hand and Wrist, Slide 4)"
+    },
+    {
+        learningObjective: "LO1 (Palm of Hand and Wrist): Identify and describe the bones, articulations, and associated ligaments of the hand & wrist.",
+        question: "A 22-year-old snowboarder falls onto his outstretched hand (FOOSH injury) and presents with pain in the lateral aspect of his wrist, specifically in the anatomical snuff box. An X-ray confirms a fracture of the most commonly fractured carpal bone. Which bone has been fractured?",
+        options: {
+            A: "Lunate",
+            B: "Hamate",
+            C: "Triquetrum",
+            D: "Scaphoid"
+        },
+        correctAnswer: "D",
+        rationale: "The scaphoid is the most frequently fractured carpal bone, typically resulting from a FOOSH injury. A key clinical sign is tenderness in the anatomical snuff box.",
+        source: "'The scaphoid is the most commonly fractured carpal bone, usually from falling on an outstretched hand. Pain is felt on the lateral aspect of the wrist in the anatomical snuff box.' (Palm of Hand and Wrist, Slide 59)"
+    },
+    {
+        learningObjective: "LO1 (Palm of Hand and Wrist): Identify and describe the bones, articulations, and associated ligaments of the hand & wrist.",
+        question: "The thumb's ability to touch the tips of the other fingers is a crucial human function. This movement is primarily enabled by the unique shape of the joint at the base of the thumb. Which joint is responsible for this wide range of motion, including opposition?",
+        options: {
+            A: "Metacarpophalangeal (MCP) joint",
+            B: "Radiocarpal joint",
+            C: "Carpometacarpal (CMC) joint of the thumb",
+            D: "Proximal interphalangeal (PIP) joint"
+        },
+        correctAnswer: "C",
+        rationale: "The first carpometacarpal joint (at the base of the thumb) is a saddle-type synovial joint that allows for flexion/extension, abduction/adduction, and circumduction, which together enable the complex movement of opposition.",
+        source: "'Carpo-metacarpal Joint of Thumb...Flexion/extension, Abduction/adduction, Circumduction.' (Palm of Hand and Wrist, Slide 14)"
+    },
+    {
+        learningObjective: "LO2 (Palm of Hand and Wrist): Discuss the fascial structures of the hand & wrist. Describe the carpal tunnel and ulnar canal, including the structures that course through each. Explain the clinical presentation and anatomical basis for Dupuytren's contracture, carpal tunnel syndrome, and ulnar canal syndrome.",
+        question: "A 50-year-old office worker presents with numbness and tingling in her thumb, index, and middle fingers, consistent with carpal tunnel syndrome. This condition is caused by compression of the median nerve within the carpal tunnel. Which of the following structures also passes through the carpal tunnel?",
+        options: {
+            A: "Ulnar artery",
+            B: "Flexor carpi radialis tendon",
+            C: "Palmaris longus tendon",
+            D: "Flexor digitorum profundus tendons"
+        },
+        correctAnswer: "D",
+        rationale: "The carpal tunnel contains the median nerve and nine flexor tendons: four from flexor digitorum superficialis, four from flexor digitorum profundus, and the tendon of flexor pollicis longus. The ulnar artery and palmaris longus tendon pass superficial to the carpal tunnel.",
+        source: "'Structures passing deep to the flexor retinaculum (within the carpal tunnel) are: flexor digitorum superficialis (4 tendons), flexor digitorum profundus (4 tendons), flexor pollicis longus, and the median nerve.' (Palm of Hand and Wrist, Slide 60)"
+    },
+    {
+        learningObjective: "LO2 (Palm of Hand and Wrist): Discuss the fascial structures of the hand & wrist. Describe the carpal tunnel and ulnar canal, including the structures that course through each. Explain the clinical presentation and anatomical basis for Dupuytren's contracture, carpal tunnel syndrome, and ulnar canal syndrome.",
+        question: "A 60-year-old man of Northern European descent presents with a progressive, painless flexion of his 4th and 5th digits, which he is unable to straighten. The physician notes palpable nodules and cords in his palm. This condition is due to the shortening and thickening of collagen fibers in which fascial structure?",
+        options: {
+            A: "Flexor retinaculum",
+            B: "Palmar aponeurosis",
+            C: "Thenar fascia",
+            D: "Hypothenar fascia"
+        },
+        correctAnswer: "B",
+        rationale: "Dupuytren's contracture is characterized by the unexplained shortening, thickening, and contracture of the palmar aponeurosis. This pulls the affected fingers (most commonly the 4th and 5th) into permanent flexion.",
+        source: "'Unexplained contracture & thickening of collagen fibers in the palmar aponeurosis.' (Palm of Hand and Wrist, Slide 18)"
+    },
+    {
+        learningObjective: "LO2 (Palm of Hand and Wrist): Discuss the fascial structures of the hand & wrist. Describe the carpal tunnel and ulnar canal, including the structures that course through each. Explain the clinical presentation and anatomical basis for Dupuytren's contracture, carpal tunnel syndrome, and ulnar canal syndrome.",
+        question: "A cyclist presents with numbness in his little finger and weakness in the intrinsic muscles of his hand after a long-distance ride. The physician diagnoses ulnar canal syndrome (handlebar neuropathy), caused by compression in Guyon's canal. Which two structures pass through this canal?",
+        options: {
+            A: "Median nerve and ulnar artery",
+            B: "Ulnar nerve and ulnar artery",
+            C: "Ulnar nerve and radial artery",
+            D: "Median nerve and radial artery"
+        },
+        correctAnswer: "B",
+        rationale: "The ulnar (Guyon's) canal is a passageway at the wrist formed by the pisiform and hamate bones. The ulnar nerve and ulnar artery pass through this canal, making them vulnerable to compression.",
+        source: "'Ulnar (Guyon's) Canal...Ulnar artery & nerve pass through.' (Palm of Hand and Wrist, Slide 24)"
+    },
+    {
+        learningObjective: "LO3 (Palm of Hand and Wrist): Define intrinsic muscles of the hand, their attachments, actions, and innervation. Compare & contrast the intrinsic muscles with the extrinsic muscles of the hand.",
+        question: "A patient with a deep laceration at the base of the thumb presents with weakness in thumb abduction and an inability to oppose the thumb. The physician suspects an injury to the recurrent branch of the median nerve, which innervates most of the muscles in which compartment?",
+        options: {
+            A: "Hypothenar compartment",
+            B: "Central compartment",
+            C: "Thenar compartment",
+            D: "Adductor compartment"
+        },
+        correctAnswer: "C",
+        rationale: "The recurrent branch of the median nerve provides motor innervation to the three thenar muscles: abductor pollicis brevis, flexor pollicis brevis (superficial head), and opponens pollicis. These muscles are responsible for thumb abduction, flexion, and opposition.",
+        source: "'Innervation: Recurrent branch of the median nerve.' (Palm of Hand and Wrist, Slide 27)"
+    },
+    {
+        learningObjective: "LO3 (Palm of Hand and Wrist): Define intrinsic muscles of the hand, their attachments, actions, and innervation. Compare & contrast the intrinsic muscles with the extrinsic muscles of the hand.",
+        question: "A patient with an ulnar nerve lesion is asked to hold a piece of paper between their thumb and the side of their palm while the examiner tries to pull it away. The patient is unable to hold the paper securely. This test, known as Froment's sign, indicates paralysis of which muscle?",
+        options: {
+            A: "Abductor pollicis brevis",
+            B: "Adductor pollicis",
+            C: "Opponens pollicis",
+            D: "Flexor pollicis longus"
+        },
+        correctAnswer: "B",
+        rationale: "The adductor pollicis muscle adducts the thumb and is innervated by the deep branch of the ulnar nerve. Froment's sign specifically tests the strength of this muscle; weakness results in the inability to adduct the thumb to hold a piece of paper.",
+        source: "'Adductor Pollicis Muscle: Adducts thumb & aids opposition...Innervation: Deep br. of Ulnar n.' (Palm of Hand and Wrist, Slide 36)"
+    },
+    {
+        learningObjective: "LO3 (Palm of Hand and Wrist): Define intrinsic muscles of the hand, their attachments, actions, and innervation. Compare & contrast the intrinsic muscles with the extrinsic muscles of the hand.",
+        question: "A patient is being tested for intrinsic hand muscle function. When asked to spread their fingers apart, they are unable to do so. This action, known as finger abduction, is primarily performed by which group of muscles?",
+        options: {
+            A: "Palmar interossei",
+            B: "Dorsal interossei",
+            C: "Lumbricals",
+            D: "Thenar muscles"
+        },
+        correctAnswer: "B",
+        rationale: "The dorsal interossei muscles are responsible for abducting the 2nd, 3rd, and 4th digits away from the midline of the hand (the 3rd digit). The mnemonic 'DAB' (Dorsal ABduct) is used to remember this function.",
+        source: "'Dorsal Interossei (4) Abduction (D-A-B).' (Palm of Hand and Wrist, Slide 37)"
+    },
+    {
+        learningObjective: "LO4 (Palm of Hand and Wrist): Describe and recognize typical vascular patterns for arterial blood flow into the hand. Trace the sequential routes blood would follow in the hand.",
+        question: "An Allen test is performed on a patient prior to radial artery cannulation. The test assesses the collateral circulation of the hand, which relies on the anastomosis of two major arterial arches. Which artery is the main contributor to the superficial palmar arch?",
+        options: {
+            A: "Radial artery",
+            B: "Ulnar artery",
+            C: "Anterior interosseous artery",
+            D: "Princeps pollicis artery"
+        },
+        correctAnswer: "B",
+        rationale: "The superficial palmar arch is one of the two main arterial arches in the hand. It is primarily formed by the continuation of the ulnar artery, though it is often completed by a superficial branch from the radial artery.",
+        source: "'Mainly a continuation of the ulnar artery, although it is usually completed by a superficial branch of the radial a.' (Palm of Hand and Wrist, Slide 63)"
+    },
+    {
+        learningObjective: "LO4 (Palm of Hand and Wrist): Describe and recognize typical vascular patterns for arterial blood flow into the hand. Trace the sequential routes blood would follow in the hand.",
+        question: "The deep palmar arch lies deep to the long flexor tendons in the hand. It is primarily formed by the terminal part of one artery anastomosing with a branch from another. Which artery is the main contributor to the deep palmar arch?",
+        options: {
+            A: "Ulnar artery",
+            B: "Radial artery",
+            C: "Common interosseous artery",
+            D: "Superficial palmar arch"
+        },
+        correctAnswer: "B",
+        rationale: "After passing dorsally around the wrist, the radial artery enters the palm and becomes the main contributor to the deep palmar arch. It anastomoses with the deep branch of the ulnar artery to complete the arch.",
+        source: "'Ends by anastomosing with the deep branch of the ulnar artery to form the deep palmar arch (main contributor).' (Palm of Hand and Wrist, Slide 63)"
+    },
+    {
+        learningObjective: "LO4 (Palm of Hand and Wrist): Describe and recognize typical vascular patterns for arterial blood flow into the hand. Trace the sequential routes blood would follow in the hand.",
+        question: "Blood flows from the superficial palmar arch into arteries that supply the digits. Which arteries arise directly from the superficial arch to travel in the webspaces before dividing?",
+        options: {
+            A: "Proper palmar digital arteries",
+            B: "Princeps pollicis artery",
+            C: "Common palmar digital arteries",
+            D: "Palmar metacarpal arteries"
+        },
+        correctAnswer: "C",
+        rationale: "The superficial palmar arch gives rise to common palmar digital arteries, which then travel towards the digits and bifurcate into the proper palmar digital arteries that supply the adjacent sides of the fingers.",
+        source: "'Superficial Palmar Arch...b. Common Palmar Digital Artery.' (Palm of Hand and Wrist, Slide 41)"
+    },
+    {
+        learningObjective: "LO5 (Palm of Hand and Wrist): Describe the motor and sensory innervation of the hand. Trace the median and ulnar nerves and their branches within the hand. Compare and contrast their functions.",
+        question: "A patient with carpal tunnel syndrome experiences sensory deficits due to compression of the median nerve. What is the characteristic sensory distribution of the median nerve in the hand?",
+        options: {
+            A: "The medial one and a half digits",
+            B: "The lateral three and a half digits",
+            C: "The entire dorsum of the hand",
+            D: "The skin over the hypothenar eminence"
+        },
+        correctAnswer: "B",
+        rationale: "The median nerve provides sensory innervation to the palmar and distal dorsal aspects of the lateral three and a half digits (thumb, index, middle, and lateral half of the ring finger), including the nail beds.",
+        source: "'Sensory: palmar & distal dorsal aspects of lateral 3½ digits (includes nail beds).' (Palm of Hand and Wrist, Slide 45)"
+    },
+    {
+        learningObjective: "LO5 (Palm of Hand and Wrist): Describe the motor and sensory innervation of the hand. Trace the median and ulnar nerves and their branches within the hand. Compare and contrast their functions.",
+        question: "A patient has atrophy of the thenar eminence due to a chronic median nerve lesion at the wrist. This results in significant functional loss, particularly the inability to oppose the thumb. Which specific branch of the median nerve is responsible for innervating the thenar muscles?",
+        options: {
+            A: "Palmar cutaneous branch",
+            B: "Anterior interosseous nerve",
+            C: "Recurrent branch",
+            D: "Common palmar digital branch"
+        },
+        correctAnswer: "C",
+        rationale: "The recurrent branch of the median nerve, sometimes called the 'million-dollar nerve,' arises just distal to the carpal tunnel and curves back to supply the thenar muscles (opponens pollicis, abductor pollicis brevis, and superficial head of flexor pollicis brevis).",
+        source: "'Recurrent branch of the median nerve – runs superficially to innervate the thenar muscles.' (Palm of Hand and Wrist, Slide 64)"
+    },
+    {
+        learningObjective: "LO5 (Palm of Hand and Wrist): Describe the motor and sensory innervation of the hand. Trace the median and ulnar nerves and their branches within the hand. Compare and contrast their functions.",
+        question: "A patient with a deep ulnar nerve lesion at the wrist would experience weakness and atrophy of most of the intrinsic hand muscles. Which of the following muscles is innervated by the deep branch of the ulnar nerve?",
+        options: {
+            A: "Opponens pollicis",
+            B: "1st and 2nd lumbricals",
+            C: "Adductor pollicis",
+            D: "Abductor pollicis brevis"
+        },
+        correctAnswer: "C",
+        rationale: "The deep branch of the ulnar nerve innervates the hypothenar muscles, the medial two lumbricals, all the interossei, the adductor pollicis, and the deep head of the flexor pollicis brevis. The other options are innervated by the median nerve.",
+        source: "'Deep branch of ulnar nerve – innervates the hypothenar muscles, medial 2 lumbricals, adductor pollicis, all the interosseous muscles, and deep head of flexor pollicis brevis.' (Palm of Hand and Wrist, Slide 65)"
+    },
+    {
+        learningObjective: "LO6 (Palm of Hand and Wrist): Identify and discuss the clinical importance of synovial sheaths & bursae of the hand.",
+        question: "A patient presents with a puncture wound to their little finger, which has become infected. The infection has tracked proximally into the palm and wrist. This rapid spread is possible because the synovial sheath of the 5th digit is continuous with which other structure?",
+        options: {
+            A: "The synovial sheath of the index finger",
+            B: "The thenar bursa",
+            C: "The common flexor sheath (ulnar bursa)",
+            D: "The radial bursa"
+        },
+        correctAnswer: "C",
+        rationale: "The synovial sheath for the tendons of the 5th digit is typically continuous with the common flexor sheath (ulnar bursa), which contains the flexor digitorum superficialis and profundus tendons in the carpal tunnel. This continuity allows infections to spread from the little finger into the palm and up into the forearm.",
+        source: "'The synovial sheath for digit 5 is continuous with the common flexor sheath; thus, infection here can spread through the palm and carpal tunnel to the anterior forearm.' (Palm of Hand and Wrist, Slide 63)"
+    },
+    {
+        learningObjective: "LO6 (Palm of Hand and Wrist): Identify and discuss the clinical importance of synovial sheaths & bursae of the hand.",
+        question: "A patient develops a painful, swollen finger after a minor cut, a condition known as infectious tenosynovitis. What is the primary function of the synovial sheaths that have become inflamed?",
+        options: {
+            A: "To provide motor innervation to the digits",
+            B: "To supply blood to the flexor tendons",
+            C: "To lubricate tendons and decrease friction",
+            D: "To anchor the skin to the underlying bone"
+        },
+        correctAnswer: "C",
+        rationale: "Synovial sheaths are bursae that wrap around tendons. They contain synovial fluid, which lubricates the tendons, allowing them to glide smoothly within fibrous digital sheaths and under retinacula with minimal friction.",
+        source: "'Tendons glide through bursae containing synovial fluid, which lubricates them & decreases friction.' (Palm of Hand and Wrist, Slide 39)"
+    },
+    {
+        learningObjective: "LO6 (Palm of Hand and Wrist): Identify and discuss the clinical importance of synovial sheaths & bursae of the hand.",
+        question: "Infectious tenosynovitis of a finger can be a surgical emergency. The infection is contained within the space formed by the osseofibrous canal that binds the flexor tendons to the phalanges. What are these canals called?",
+        options: {
+            A: "Carpal tunnels",
+            B: "Fibrous digital sheaths",
+            C: "Extensor hoods",
+            D: "Palmar aponeuroses"
+        },
+        correctAnswer: "B",
+        rationale: "The fibrous digital sheaths are strong ligamentous tunnels on the palmar aspect of the fingers. They hold the flexor tendons and their synovial sheaths against the bones, acting as pulleys. An infection within the synovial sheath is contained by this fibrous sheath.",
+        source: "'Fibrous digital sheaths – provide osseofibrous canals that closely bind tendons to the phalanges.' (Palm of Hand and Wrist, Slide 63)"
+    },
+    {
+        learningObjective: "LO7 (Palm of Hand and Wrist): Discuss the clinical presentation and anatomical basis for significant hand/wrist problems including: fractures, dislocations, lacerations, ischemia, tenosynovitis, and neurological injuries.",
+        question: "Following a scaphoid fracture, a patient develops avascular necrosis of the proximal fragment of the bone. This complication is due to the unique retrograde blood supply to the scaphoid, which primarily enters the bone distally. Which artery provides this blood supply?",
+        options: {
+            A: "Ulnar artery",
+            B: "Anterior interosseous artery",
+            C: "Radial artery",
+            D: "Deep palmar arch"
+        },
+        correctAnswer: "C",
+        rationale: "The blood supply to the scaphoid bone primarily comes from branches of the radial artery that enter the distal part of the bone. A fracture across the waist of the scaphoid can disrupt this blood flow to the proximal fragment, leading to avascular necrosis.",
+        source: "[Diagram showing the Radial artery supplying the scaphoid]. (Palm of Hand and Wrist, Slide 12)"
+    },
+    {
+        learningObjective: "LO7 (Palm of Hand and Wrist): Discuss the clinical presentation and anatomical basis for significant hand/wrist problems including: fractures, dislocations, lacerations, ischemia, tenosynovitis, and neurological injuries.",
+        question: "A patient presents with a 'Hand of Benediction' sign when asked to make a fist. He is unable to flex the 2nd and 3rd digits at the MCP and IP joints. This clinical finding indicates a lesion of which nerve, and where is the injury most likely located?",
+        options: {
+            A: "Ulnar nerve at the wrist",
+            B: "Ulnar nerve at the elbow",
+            C: "Median nerve at the wrist",
+            D: "Median nerve at the elbow"
+        },
+        correctAnswer: "D",
+        rationale: "The 'Hand of Benediction' is a sign of a proximal median nerve lesion (at or above the elbow). The paralysis of the flexor digitorum superficialis and the lateral half of the flexor digitorum profundus prevents flexion of the 2nd and 3rd digits when attempting to make a fist.",
+        source: "'Lesion: Median Nerve! *specifically at the elbow.' (Palm of Hand and Wrist, Slide 51)"
+    },
+    {
+        learningObjective: "LO7 (Palm of Hand and Wrist): Discuss the clinical presentation and anatomical basis for significant hand/wrist problems including: fractures, dislocations, lacerations, ischemia, tenosynovitis, and neurological injuries.",
+        question: "A patient with a long-standing ulnar nerve injury is asked to extend their fingers. The 4th and 5th digits remain flexed at the interphalangeal joints and hyperextended at the metacarpophalangeal joint. This deformity is known as an 'ulnar claw.' It is caused by paralysis of which muscles?",
+        options: {
+            A: "Flexor digitorum profundus (medial part)",
+            B: "3rd and 4th lumbricals",
+            C: "Dorsal and palmar interossei",
+            D: "Hypothenar muscles"
+        },
+        correctAnswer: "B",
+        rationale: "The ulnar claw deformity is caused by the loss of function of the ulnar-innervated 3rd and 4th lumbricals. The lumbricals normally flex the MCP joints and extend the IP joints. Without their action, the unopposed long extensors hyperextend the MCP joint, and the unopposed long flexors (FDP) cause flexion at the IP joints.",
+        source: "'Inability to extend digits 4 & 5 at the MCP joint and flex IP joint...What muscles are responsible for this extension/flexion? 3-4 Lumbricals.' (Palm of Hand and Wrist, Slide 54)"
+    },
+    {
+        learningObjective: "LO8 (Palm of Hand and Wrist): Identify anatomical structures associated with the palm of the hand and wrist on X-Rays, MRI, and CT scans.",
+        question: "A radiologist is reviewing an AP radiograph of the wrist and uses a mnemonic to identify the carpal bones. The first bone in the proximal row, located on the lateral (thumb) side, is which of the following?",
+        options: {
+            A: "Lunate",
+            B: "Scaphoid",
+            C: "Trapezium",
+            D: "Pisiform"
+        },
+        correctAnswer: "B",
+        rationale: "The scaphoid is the most lateral bone in the proximal row of carpals. The mnemonic 'Some Lovers Try Positions That They Can't Handle' starts with Scaphoid on the lateral side of the proximal row.",
+        source: "[Diagram and radiograph showing the carpal bones with the mnemonic 'Some Lovers Try Positions...']. (Palm of Hand and Wrist, Slide 11)"
+    },
+    {
+        learningObjective: "LO8 (Palm of Hand and Wrist): Identify anatomical structures associated with the palm of the hand and wrist on X-Rays, MRI, and CT scans.",
+        question: "On a coronal MRI of the wrist, a triangular-shaped structure is seen situated between the distal ulna and the triquetrum. This structure is a key stabilizer of the distal radioulnar joint. What is this structure?",
+        options: {
+            A: "Scapholunate ligament",
+            B: "Ulnar collateral ligament",
+            C: "Triangular fibrocartilage complex (TFCC)",
+            D: "Flexor retinaculum"
+        },
+        correctAnswer: "C",
+        rationale: "The Triangular Fibrocartilage Complex (TFCC) is an articular disc that sits at the distal end of the ulna, articulating with the triquetrum and lunate. It is a critical stabilizer of the wrist and distal radioulnar joint.",
+        source: "[Diagram showing the TFCC] Articular disc (TFCC) of the distal radioulnar joint.' (Palm of Hand and Wrist, Slide 4)"
+    },
+    {
+        learningObjective: "LO8 (Palm of Hand and Wrist): Identify anatomical structures associated with the palm of the hand and wrist on X-Rays, MRI, and CT scans.",
+        question: "A patient undergoes a CT scan for wrist pain. The axial images clearly show a bony projection extending anteriorly from the hamate bone. The ulnar nerve and artery pass medial to this structure. What is this projection called?",
+        options: {
+            A: "Styloid process of the ulna",
+            B: "Tubercle of the trapezium",
+            C: "Hook of the hamate",
+            D: "Pisiform bone"
+        },
+        correctAnswer: "C",
+        rationale: "The hamate bone is distinguished by its prominent hook-like process, the hook of the hamate (or hamulus), which projects anteriorly. This structure is an important attachment site and is closely associated with the ulnar nerve and artery in Guyon's canal.",
+        source: "'Hamate - wedge-shaped bone with a hook-like process (hook of the hamate or hamulus)...' (Palm of Hand and Wrist, Slide 59)"
+    },
+    {
+        learningObjective: "LO1 (Upper Extremity Imaging): Understand anatomic relationships of the upper extremity.",
+        question: "An axial MRI of the shoulder is being reviewed. The radiologist identifies a large muscle whose tendon passes anterior to the glenohumeral joint to insert on the lesser tubercle of the humerus. This muscle is a key internal rotator of the shoulder. Which muscle is being described?",
+        options: {
+            A: "Supraspinatus",
+            B: "Infraspinatus",
+            C: "Teres minor",
+            D: "Subscapularis"
+        },
+        correctAnswer: "D",
+        rationale: "The subscapularis muscle originates from the subscapular fossa and its tendon crosses anterior to the shoulder joint to insert on the lesser tubercle. It is a primary internal rotator and is clearly visualized on axial MRI slices of the shoulder.",
+        source: "[Axial MRI image with the subscapularis muscle highlighted]. (Upper Extremity Imaging, Slide 8)"
+    },
+    {
+        learningObjective: "LO1 (Upper Extremity Imaging): Understand anatomic relationships of the upper extremity.",
+        question: "A patient sustains a fracture of the surgical neck of the humerus. The orthopedic surgeon is concerned about potential injury to the neurovascular structures that pass through the quadrangular space. Which nerve and artery pass through this space and are at risk?",
+        options: {
+            A: "Median nerve and brachial artery",
+            B: "Radial nerve and deep brachial artery",
+            C: "Axillary nerve and posterior circumflex humeral artery",
+            D: "Ulnar nerve and superior ulnar collateral artery"
+        },
+        correctAnswer: "C",
+        rationale: "The quadrangular space is a space in the posterior shoulder region bounded by the teres minor, teres major, long head of the triceps, and the humerus. The axillary nerve and posterior circumflex humeral artery pass through this space and are vulnerable to injury with surgical neck fractures or shoulder dislocations.",
+        source: "'Quadrangular space: Posterior circumflex humeral a., Axillary n.' (Upper Extremity Imaging, Slide 12)"
+    },
+    {
+        learningObjective: "LO1 (Upper Extremity Imaging): Understand anatomic relationships of the upper extremity.",
+        question: "A lateral radiograph of a normal elbow is taken with the elbow flexed to 90 degrees. Three bony landmarks should form an equilateral triangle or a straight line depending on the degree of flexion. Which three landmarks are used for this assessment?",
+        options: {
+            A: "Medial epicondyle, lateral epicondyle, and radial head",
+            B: "Olecranon, medial epicondyle, and lateral epicondyle",
+            C: "Olecranon, coronoid process, and radial head",
+            D: "Capitulum, trochlea, and olecranon fossa"
+        },
+        correctAnswer: "B",
+        rationale: "The relationship between the olecranon process and the medial and lateral epicondyles of the humerus is a key anatomical landmark used to assess for elbow dislocation or fracture on a radiograph. These three points form a triangle in flexion and a line in extension. (This is a foundational concept tested by applying knowledge from the provided images).",
+        source: "[Labeled elbow X-ray images showing Olecranon, Medial Epicondyle, and Lateral Epicondyle]. (Upper Extremity Imaging, Slides 13-14)"
+    },
+    {
+        learningObjective: "LO2 (Upper Extremity Imaging): Review selected pathologic conditions of the upper extremity.",
+        question: "A 10-year-old boy falls on his outstretched hand and presents with significant elbow pain and swelling. A lateral X-ray of the elbow shows displacement of the anterior fat pad ('sail sign') and a visible posterior fat pad. The presence of a visible posterior fat pad is highly suggestive of what underlying condition?",
+        options: {
+            A: "Joint dislocation",
+            B: "Joint effusion",
+            C: "Ligamentous sprain",
+            D: "Normal variant"
+        },
+        correctAnswer: "B",
+        rationale: "The posterior fat pad of the elbow lies within the olecranon fossa and is not normally visible on a lateral X-ray. Its visualization indicates that it has been displaced by a joint effusion (fluid in the joint), which in the setting of trauma is highly suggestive of an occult (hidden) fracture.",
+        source: "'A visible posterior fat pad in trauma suggests an occult fracture...Visible Fat Pads = Joint Effusion.' (Upper Extremity Imaging, Slide 49 and 31)"
+    },
+    {
+        learningObjective: "LO2 (Upper Extremity Imaging): Review selected pathologic conditions of the upper extremity.",
+        question: "A patient presents to the emergency department with severe shoulder pain after a fall. An AP radiograph of the shoulder shows the humeral head located inferior and medial to the glenoid fossa. This is the most common type of shoulder dislocation. What type of dislocation is this?",
+        options: {
+            A: "Posterior dislocation",
+            B: "Anterior dislocation",
+            C: "Superior dislocation",
+            D: "Intrathoracic dislocation"
+        },
+        correctAnswer: "B",
+        rationale: "Anterior shoulder dislocations account for over 95% of all shoulder dislocations. On an AP X-ray, the humeral head is displaced from its normal articulation with the glenoid and typically comes to rest in a subcoracoid or subglenoid position (inferior and medial to the glenoid).",
+        source: "'Anterior Shoulder Dislocations (>95%).' (Upper Extremity Imaging, Slide 19)"
+    },
+    {
+        learningObjective: "LO2 (Upper Extremity Imaging): Review selected pathologic conditions of the upper extremity.",
+        question: "A patient with a severe crush injury to the forearm develops intense pain that is out of proportion to the visible injury, along with paresthesias and a feeling of tightness. The physician is concerned about compartment syndrome. What is the definitive diagnostic measurement for this condition?",
+        options: {
+            A: "Serum creatinine kinase level",
+            B: "Electromyography (EMG)",
+            C: "Doppler ultrasound",
+            D: "Intracompartmental pressure measurement"
+        },
+        correctAnswer: "D",
+        rationale: "While the 'Ps' (Pain, Pallor, Paresthesia, Pulselessness, Paralysis) are clinical signs, the definitive diagnosis of compartment syndrome is made by directly measuring the pressure within the fascial compartments of the limb. Pressures greater than 30-45 mmHg are concerning and may require emergent fasciotomy.",
+        source: "[Image of a Stryker device measuring pressure] >30-45mm Hg concerning!' (Upper Extremity Imaging, Slide 42)"
+    },
+    {
+        learningObjective: "LO3 (Upper Extremity Imaging): Compare varying imaging modalities of both normal anatomy and pathologic conditions of the upper extremity.",
+        question: "A 25-year-old baseball pitcher presents with chronic shoulder pain. The physician suspects a tear of the glenoid labrum. Which imaging modality would be most sensitive for evaluating this soft tissue structure?",
+        options: {
+            A: "X-ray",
+            B: "CT scan",
+            C: "MRI",
+            D: "Ultrasound"
+        },
+        correctAnswer: "C",
+        rationale: "Magnetic Resonance Imaging (MRI) provides superior soft tissue contrast compared to X-ray and CT. It is the gold standard for evaluating soft tissue structures around the shoulder, including the rotator cuff tendons, biceps tendon, and the glenoid labrum.",
+        source: "[Multiple slides showing detailed soft tissue anatomy of the shoulder] Area: Shoulder, Modality: MRI.' (Upper Extremity Imaging, Slides 7-11)"
+    },
+    {
+        learningObjective: "LO3 (Upper Extremity Imaging): Compare varying imaging modalities of both normal anatomy and pathologic conditions of the upper extremity.",
+        question: "A patient with a suspected posterior shoulder dislocation is sent for imaging. In addition to standard AP and axillary views, the radiologist obtains a scapular Y view. What is the primary advantage of this view in the setting of a suspected dislocation?",
+        options: {
+            A: "It provides the best detail of the glenoid bone.",
+            B: "It clearly demonstrates the relationship of the humeral head to the glenoid.",
+            C: "It is the best view for identifying subtle fractures of the clavicle.",
+            D: "It is used to assess the acromioclavicular joint space."
+        },
+        correctAnswer: "B",
+        rationale: "The scapular Y view is a lateral projection where the scapula forms a 'Y' shape with the acromion and coracoid process. In a normal shoulder, the humeral head is centered over the intersection of the 'Y' (the glenoid). In a dislocation, the humeral head will be displaced anteriorly or posteriorly relative to the glenoid, which is clearly demonstrated on this view.",
+        source: "[Image of a normal Scapula Y view showing the humeral head centered on the glenoid]. (Upper Extremity Imaging, Slide 24)"
+    },
+    {
+        learningObjective: "LO3 (Upper Extremity Imaging): Compare varying imaging modalities of both normal anatomy and pathologic conditions of the upper extremity.",
+        question: "A patient with a complex elbow fracture requires surgical planning. The surgeon needs to see the precise orientation of multiple fracture fragments in three dimensions. While initial X-rays were obtained, which imaging modality would be most beneficial for detailed pre-operative planning in this case?",
+        options: {
+            A: "MRI",
+            B: "Ultrasound",
+            C: "CT scan",
+            D: "Bone scan"
+        },
+        correctAnswer: "C",
+        rationale: "Computed Tomography (CT) is superior to X-ray for evaluating complex bone anatomy and fractures. It provides cross-sectional images that can be reconstructed into 3D models, allowing the surgeon to visualize the exact size, location, and displacement of all fracture fragments for surgical planning.",
+        source: "'CT and MRI can be found through the links above... [Used for complex anatomical views].' (Upper Extremity Imaging, Slide 3)"
+    }
+];
+const quizContainer = document.getElementById('quiz-container');
+const themeToggleButton = document.getElementById('theme-toggle-button');
+const bodyElement = document.body;
+function applyTheme(theme) {
+if (theme === 'light') {
+bodyElement.classList.add('light-theme');
+themeToggleButton.textContent = 'Switch to Dark Mode';
+} else {
+bodyElement.classList.remove('light-theme');
+themeToggleButton.textContent = 'Switch to Light Mode';
+}
+localStorage.setItem('quizTheme', theme);
+}
+function loadQuiz() {
+quizData.forEach((qData, index) => {
+const questionBlock = document.createElement('div');
+questionBlock.classList.add('question-block');
+questionBlock.id = `q${index}`;
+const loText = document.createElement('div');
+loText.classList.add('learning-objective');
+loText.textContent = qData.learningObjective;
+questionBlock.appendChild(loText);
+const questionText = document.createElement('p');
+questionText.classList.add('question-text');
+questionText.innerHTML = `${index + 1}. ${qData.question}`;
+questionBlock.appendChild(questionText);
+const optionsDiv = document.createElement('div');
+optionsDiv.classList.add('options');
+for (const optionKey in qData.options) {
+const optionId = `q${index}_${optionKey}`;
+const label = document.createElement('label');
+label.htmlFor = optionId;
+const radioInput = document.createElement('input');
+radioInput.type = 'radio';
+radioInput.name = `q${index}`;
+radioInput.value = optionKey;
+radioInput.id = optionId;
+const labelText = document.createElement('span');
+labelText.textContent = ` ${optionKey}. ${qData.options[optionKey]}`;
+label.appendChild(radioInput);
+label.appendChild(labelText);
+optionsDiv.appendChild(label);
+}
+questionBlock.appendChild(optionsDiv);
+const buttonContainer = document.createElement('div');
+buttonContainer.classList.add('button-container');
+const checkButton = document.createElement('button');
+checkButton.textContent = 'Check Answer';
+checkButton.classList.add('check-button');
+checkButton.onclick = () => checkAnswer(index);
+buttonContainer.appendChild(checkButton);
+questionBlock.appendChild(buttonContainer);
+const feedbackDiv = document.createElement('div');
+feedbackDiv.classList.add('feedback');
+questionBlock.appendChild(feedbackDiv);
+quizContainer.appendChild(questionBlock);
+});
+}
+function checkAnswer(questionIndex) {
+const questionBlockElement = document.getElementById(`q${questionIndex}`);
+const selectedRadioButton = questionBlockElement.querySelector('input[type="radio"]:checked');
+if (!selectedRadioButton) {
+alert("Please select an answer first.");
+return;
+}
+const selectedOptionKey = selectedRadioButton.value;
+const qData = quizData[questionIndex];
+const feedbackDiv = questionBlockElement.querySelector('.feedback');
+const correct = selectedOptionKey === qData.correctAnswer;
+let feedbackHTML = '';
+if (correct) {
+feedbackHTML = `<span class="feedback-status">Correct!</span>`;
+feedbackDiv.className = 'feedback correct';
+} else {
+feedbackHTML = `<span class="feedback-status">Incorrect. The correct answer is ${qData.correctAnswer}.</span>`;
+feedbackDiv.className = 'feedback incorrect';
+}
+feedbackHTML += `<div class="feedback-rationale"><strong>Rationale:</strong> ${qData.rationale}</div>`;
+feedbackHTML += `<div class="feedback-source"><strong>Source:</strong> ${qData.source}</div>`;
+feedbackDiv.innerHTML = feedbackHTML;
+}
+themeToggleButton.addEventListener('click', () => {
+if (bodyElement.classList.contains('light-theme')) {
+applyTheme('dark');
+} else {
+applyTheme('light');
+}
+});
+document.addEventListener('DOMContentLoaded', () => {
+const savedTheme = localStorage.getItem('quizTheme') || 'dark';
+applyTheme(savedTheme);
+loadQuiz();
+});
+</script>
+</body>
+</html>
